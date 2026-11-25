@@ -41,6 +41,13 @@ jobs:
             rsvg-convert -w "$size" -h "$size" icon.svg -o "ascend-icon-$size.png"
             test -s "ascend-icon-$size.png"
           done
+          python3 - <<'PY'
+          from pathlib import Path
+          import subprocess
+          for w,h in [(1179,2556),(1206,2622),(1290,2796),(1320,2868),(1125,2436),(1080,2340)]:
+              svg=f'<svg xmlns="http://www.w3.org/2000/svg" width="{w}" height="{h}" viewBox="0 0 {w} {h}"><rect width="100%" height="100%" fill="#08050d"/><g transform="translate({w/2-120} {h/2-150}) scale(2)"><path d="M60 12 105 60 60 108 15 60Z" fill="none" stroke="#7047a3"/><path d="M28 87 60 24 92 87 60 69Z" fill="#bc8cff" stroke="#ead8ff"/><path d="M60 43 73 71 60 64 47 71Z" fill="#10091b"/></g><text x="{w/2}" y="{h/2+150}" text-anchor="middle" fill="#e5caff" font-family="serif" font-size="48" letter-spacing="12">ASCEND</text></svg>'
+              subprocess.run(['rsvg-convert','-o',f'ascend-start-{w}x{h}.png'],input=svg.encode(),check=True)
+          PY
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
