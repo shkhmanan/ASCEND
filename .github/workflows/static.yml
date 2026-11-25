@@ -33,6 +33,14 @@ jobs:
         uses: actions/checkout@v4
       - name: Setup Pages
         uses: actions/configure-pages@v5
+      - name: Generate PNG application icons
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y librsvg2-bin
+          for size in 180 192 512; do
+            rsvg-convert -w "$size" -h "$size" icon.svg -o "ascend-icon-$size.png"
+            test -s "ascend-icon-$size.png"
+          done
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
